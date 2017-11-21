@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class EmployeesDAO {
 	private Connection conn;
@@ -41,5 +42,34 @@ public class EmployeesDAO {
 		if (rs != null)
 			rs.close();
 	} // end exit();
+
+	public ArrayList<EmployeesDTO> search() {
+		ArrayList<EmployeesDTO> aList = new ArrayList<EmployeesDTO>();
+		try {
+			conn = init();
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM employees order by employee_id";
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				EmployeesDTO edto = new EmployeesDTO();
+				edto.setEmployee_id(rs.getInt("employee_id"));
+				edto.setFirst_name(rs.getString("first_name"));
+				edto.setSalary(rs.getInt("salary"));
+
+				aList.add(edto);
+			}
+
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return aList;
+	} // end search()
 
 } // end class

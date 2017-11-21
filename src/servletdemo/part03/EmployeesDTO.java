@@ -17,12 +17,12 @@ public class EmployeesDTO {
 		this.employee_id = employee_id;
 	}
 
-	public String getFirst_namel() {
+	public String getFirst_name() {
 		return first_name;
 	}
 
-	public void setFirst_namel(String first_namel) {
-		this.first_name = first_namel;
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
 	}
 
 	public int getSalary() {
