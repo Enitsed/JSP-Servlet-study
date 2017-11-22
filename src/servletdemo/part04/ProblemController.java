@@ -21,7 +21,7 @@ public class ProblemController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// post방식일 때 한글 처리
-		req.setCharacterEncoding("UTF-8");
+		// req.setCharacterEncoding("UTF-8");
 		String ko = req.getParameter("ko");
 		String res = "";
 		if (ko.equals("서울")) {
