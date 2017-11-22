@@ -17,6 +17,8 @@
 
 	<%-- 
 	int data = 10;
+	
+	
 	--%>
 	<!-- 변수선언 -->
 	<c:set var="data" value="10" />
@@ -32,5 +34,25 @@
 		<c:out value="${data }"></c:out>
 	</p>
 
+	<%
+		int num = 20;
+	%>
+	<!-- 스크립트에서 선언된 변수를 표현언어로 출력할 수 없다 -->
+	<%-- 스크립트 요소에 정의된 변수, 메소드를 out태그를 이용해서 출력할 때는 value속성에 <%= %>을 사용한다 --%>
+
+	<p>num:${num }</p>
+	<p>
+		num:
+		<c:out value="<%=num%>" />
+	</p>
+
+	<%
+		request.setAttribute("st", "request");
+	%>
+
+	<p>
+		st:
+		<c:out value='<%=request.getAttribute("st")%>' />
+	</p>
 </body>
 </html>

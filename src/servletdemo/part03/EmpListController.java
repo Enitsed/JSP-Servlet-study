@@ -17,7 +17,7 @@ public class EmpListController extends HttpServlet {
 		EmployeesDAO dao = EmployeesDAO.getInstance();
 		ArrayList<EmployeesDTO> aList = dao.search();
 		req.setAttribute("aList", aList);
-		RequestDispatcher dis = req.getRequestDispatcher("/servletview/part03/empList.jsp");
+		RequestDispatcher dis = req.getRequestDispatcher("/servletview/part03/empList2.jsp");
 		dis.forward(req, resp);
 	}// end doGet()
 }// end class
