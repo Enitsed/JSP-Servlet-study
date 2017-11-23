@@ -31,6 +31,7 @@ table, th, td {
 	    }
 	    $('form').submit();
 	})
+
     })
 </script>
 </head>
