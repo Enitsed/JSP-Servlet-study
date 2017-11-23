@@ -26,11 +26,11 @@ public class CharacterFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
-		System.out.println("before");
+		// System.out.println("before");
 		req.setCharacterEncoding("UTF-8");
 		chain.doFilter(req, resp);
 
-		System.out.println("after");
+		// System.out.println("after");
 	}
 
 	// 필터가 웹 콘테이너에 생성한 후 초기화할 때 호출한다.
