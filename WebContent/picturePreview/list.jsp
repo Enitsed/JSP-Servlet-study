@@ -39,7 +39,13 @@ p {
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+<script type="text/javascript">
+    $(document).ready(function() {
+	$('button').on("click", function() {
+	    $('form').submit();
+	})
+    });
+</script>
 </head>
 <body>
 	<a href="insertMain">이미지 삽입</a>

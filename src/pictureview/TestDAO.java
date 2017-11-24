@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestDAO {
 
@@ -42,6 +43,8 @@ public class TestDAO {
 			pstmt.close();
 		if (rs != null)
 			rs.close();
+		if (conn != null)
+			conn.close();
 	} // end exit();
 
 	public void insertMethod(String filepath) {
@@ -87,5 +90,50 @@ public class TestDAO {
 		}
 		return aList;
 	} // end selectMethod();
+
+	public List<String> fileList(String chk[]) {
+		List<String> aList = new ArrayList<String>();
+		try {
+			conn = init();
+			String sql = "select filepath from preview where num = ?";
+			pstmt = conn.prepareStatement(sql);
+			for (int i = 0; i < chk.length; i++) {
+				pstmt.setInt(1, Integer.parseInt(chk[i]));
+				rs = pstmt.executeQuery();
+				if (rs.next())
+					aList.add(rs.getString("filepath"));
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return aList;
+	}
+
+	public void deleteMethod(String chk[]) {
+		try {
+			conn = init();
+			String sql = "delete from preview where num = ?";
+			pstmt = conn.prepareStatement(sql);
+			for (int i = 0; i < chk.length; i++) {
+				pstmt.setInt(1, Integer.parseInt(chk[i]));
+				pstmt.addBatch();
+			}
+			pstmt.executeBatch();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 } // end class
