@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/*
+ *	http 프로토콜은 한번의 요청과 응답이 되면 클라이언트와 서버의 연결이 끊어짐
+ *	이를 해결하기 위해서 session을 이용해 클라이언트 정보를 *서버에 저장*함으로써
+ *	클라이언트와 서버의 연결을 지속시켜줌
+ */
+
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
 	@Override
