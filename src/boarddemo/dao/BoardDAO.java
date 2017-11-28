@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import boarddemo.dto.BoardDTO;
@@ -78,6 +79,24 @@ public class BoardDAO {
 		return aList;
 	}
 
+	public void readCountMethod(int num) {
+		try {
+			conn = init();
+			String sql = "update board set readcount = readcount+1 where num=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	} // end readCountMethod();
+
 	public BoardDTO viewMethod(int num) {
 		BoardDTO dto = null;
 		try {
@@ -109,8 +128,69 @@ public class BoardDAO {
 				e.printStackTrace();
 			}
 		}
-
 		return dto;
+	}
+
+	public void insertMethod(BoardDTO dto) {
+		try {
+			conn = init();
+			if (dto.getRe_level() == 0) {
+				// 제목 글이면..
+				String sql = "insert into board(num,reg_date,writer,email,subject,content,upload,ref,re_step,re_level)"
+						+ " values(board_seq.nextval,sysdate,?,?,?,?,?,board_seq.nextval,0,0)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, dto.getWriter());
+				pstmt.setString(2, dto.getEmail());
+				pstmt.setString(3, dto.getSubject());
+				pstmt.setString(4, dto.getContent());
+				pstmt.setString(5, dto.getUpload());
+			} else {
+				// 답변글이면
+				String sql = "insert into board(num,reg_date,writer,email,subject,content,upload,ref,re_step,re_level)"
+						+ " values(board_seq.nextval,sysdate,?,?,?,?,?,?,?,?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, dto.getWriter());
+				pstmt.setString(2, dto.getEmail());
+				pstmt.setString(3, dto.getSubject());
+				pstmt.setString(4, dto.getContent());
+				pstmt.setString(5, dto.getUpload());
+				pstmt.setInt(6, dto.getRef());
+				pstmt.setInt(7, dto.getRe_step());
+				pstmt.setInt(8, dto.getRe_level());
+			}
+
+			pstmt.executeUpdate();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void reStepMethod(HashMap<String, Integer> map) {
+		try {
+			conn = init();
+			String sql = "update board set re_step = re_step+1 where ref=? and re_step>?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, map.get("ref"));
+			pstmt.setInt(2, map.get("re_step"));
+
+			pstmt.executeUpdate();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 } // end class

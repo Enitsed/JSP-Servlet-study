@@ -15,11 +15,18 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+	$('.list').on('click', function() {
+	    $('form').attr('action', 'list.do');
+	    $('form').submit();
+	});
+	$('.reply').on('click', function() {
+	    $('form').attr('action', 'writeForm.do');
+	    $('form').submit();
+	});
     });
 </script>
 </head>
 <body>
-
 
 	<table border="1" width="80%">
 		<tr>

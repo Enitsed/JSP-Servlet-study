@@ -20,6 +20,8 @@ create table board(
 
 create sequence board_seq start with 1 increment by 1;
 
+create sequence board_seq start with 1 increment by 1 nocache nocycle;
+
 insert into board 
 values(board_seq.nextval, '홍길동','young@aaaa.com','제목1',sysdate,0,board_seq.nextval,
 0,0,'내용 테스트.......','127.0.0.1','sample.txt');
@@ -45,6 +47,7 @@ from board
 where ref=30
 
 delete from board;
+drop sequence board_seq;
 
 select b.*
 from (select rownum as rm, a.*

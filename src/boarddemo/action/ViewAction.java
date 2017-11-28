@@ -9,7 +9,9 @@ public class ViewAction {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) {
 		int num = Integer.parseInt(req.getParameter("num"));
 		BoardDAO dao = BoardDAO.getInstance();
+		dao.readCountMethod(num);
 		req.setAttribute("dto", dao.viewMethod(num));
+
 	} // end execute();
 
 } // end class

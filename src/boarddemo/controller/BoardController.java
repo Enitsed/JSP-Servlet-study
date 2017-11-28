@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import boarddemo.action.ListAction;
 import boarddemo.action.ViewAction;
+import boarddemo.action.WriteAction;
 
 @WebServlet("/board/*")
 public class BoardController extends HttpServlet {
@@ -33,7 +34,7 @@ public class BoardController extends HttpServlet {
 		String path = "";
 		String action = uri.substring(uri.lastIndexOf("/"));
 
-		if (action.equals("/*")) {
+		if (action.equals("/*") || action.equals("/list.do")) {
 			ListAction list = new ListAction();
 			list.execute(req, resp);
 			path = "/boardview/list.jsp";
@@ -42,8 +43,11 @@ public class BoardController extends HttpServlet {
 			view.execute(req, resp);
 			path = "/boardview/view.jsp";
 		} else if (action.equals("/writeForm.do")) {
-
-			path = "/boardview/writeform.jsp";
+			path = "/boardview/write.jsp";
+		} else if (action.equals("/write.do")) {
+			WriteAction write = new WriteAction();
+			write.execute(req, resp);
+			resp.sendRedirect("list.do");
 		}
 
 		if (path != "") {
