@@ -35,7 +35,9 @@
 						</c:if> <a href="view.do?num=${dto.num }" />${dto.subject }</td>
 					<td>${dto.writer }</td>
 					<td>${dto.readcount }</td>
-					<td>${dto.upload }</td>
+					<td><c:if test="${!empty dto.upload }">
+							<img src="../boardview/images/save.gif" />
+						</c:if></td>
 				</tr>
 			</c:forEach>
 		</table>
