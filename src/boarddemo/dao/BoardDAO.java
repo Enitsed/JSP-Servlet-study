@@ -53,7 +53,8 @@ public class BoardDAO {
 		List<BoardDTO> aList = new ArrayList<BoardDTO>();
 		try {
 			conn = init();
-			String sql = "select * from board order by ref desc";
+			String sql = "select b.* " + "from (select rownum as rm, a.* " + "from (select * from board "
+					+ "order by ref desc,re_step asc)a)b";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -145,7 +146,7 @@ public class BoardDAO {
 				pstmt.setString(4, dto.getContent());
 				pstmt.setString(5, dto.getUpload());
 			} else {
-				// 답변글이면
+				// 답변 글이면
 				String sql = "insert into board(num,reg_date,writer,email,subject,content,upload,ref,re_step,re_level)"
 						+ " values(board_seq.nextval,sysdate,?,?,?,?,?,?,?,?)";
 				pstmt = conn.prepareStatement(sql);
@@ -169,7 +170,7 @@ public class BoardDAO {
 				e.printStackTrace();
 			}
 		}
-	}
+	} // end insertMethod()
 
 	public void reStepMethod(HashMap<String, Integer> map) {
 		try {
@@ -191,6 +192,6 @@ public class BoardDAO {
 			}
 		}
 
-	}
+	} // end reStepMethod()
 
 } // end class

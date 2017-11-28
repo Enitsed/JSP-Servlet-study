@@ -28,7 +28,11 @@
 			<c:forEach items="${requestScope.aList }" var="dto">
 				<tr>
 					<td>${dto.num }</td>
-					<td><a href="view.do?num=${dto.num }" />${dto.subject }</td>
+					<td><c:if test="${dto.re_level!=0 }">
+							<img src="../boardview/images/level.gif"
+								width="${10*dto.re_level }" />
+							<img src="../boardview/images/re.gif" />
+						</c:if> <a href="view.do?num=${dto.num }" />${dto.subject }</td>
 					<td>${dto.writer }</td>
 					<td>${dto.readcount }</td>
 					<td>${dto.upload }</td>
