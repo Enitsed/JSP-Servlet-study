@@ -23,6 +23,15 @@
 	    $('form').attr('action', 'writeForm.do');
 	    $('form').submit();
 	});
+	$('.update').on('click', function() {
+	    $('form').attr('action', 'updateForm.do');
+	    $('form').submit();
+	});
+	$('.del').on('click', function() {
+	    $('form').attr('action', 'delete.do');
+	    $('form').submit();
+	});
+
     });
 </script>
 </head>
@@ -65,10 +74,12 @@
 			type="hidden" name="ref" value="${dto.ref}" /> <input type="hidden"
 			name="re_step" value="${dto.re_step}" /> <input type="hidden"
 			name="re_level" value="${dto.re_level}" /> <input type="hidden"
-			name="pageNum" value="${param.pageNum}" /> <input type="button"
-			value="목록" class="list" /> <input type="button" value="답변"
-			class="reply" /> <input type="button" value="수정" class="update" />
-		<input type="button" value="삭제" class="del" />
+			name="pageNum" value="${param.pageNum}" /><input type="hidden"
+			name="searchKey" value="${param.searchKey }" /><input type="hidden"
+			name="searchWord" value="${param.searchWord }" /> <input
+			type="button" value="목록" class="list" /> <input type="button"
+			value="답변" class="reply" /> <input type="button" value="수정"
+			class="update" /> <input type="button" value="삭제" class="del" />
 	</form>
 </body>
 </html>

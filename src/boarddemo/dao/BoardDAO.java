@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import boarddemo.dto.BoardDTO;
+import boarddemo.dto.PageDTO;
 
 public class BoardDAO {
 	private Connection conn;
@@ -49,13 +50,58 @@ public class BoardDAO {
 			conn.close();
 	} // end exit();
 
-	public List<BoardDTO> listMethod() {
+	public int rowTotalCount(HashMap<String, String> map) {
+		int cnt = 0;
+		try {
+			conn = init();
+			String sql = "select count(*) from board";
+			// where subject like '%ca%';
+			if (map.get("searchKey") != null && !(map.get("searchKey").equals("all"))) {
+				if (map.get("searchKey").equals("subject") || map.get("searchKey").equals("writer")
+						|| map.get("searchKey").equals("content")) {
+					sql += " where lower(" + map.get("searchKey") + ") like ?";
+
+				}
+			}
+			pstmt = conn.prepareStatement(sql);
+
+			if (map.get("searchKey") != null && !(map.get("searchKey").equals("all"))) {
+				if (map.get("searchKey").equals("subject") || map.get("searchKey").equals("writer")
+						|| map.get("searchKey").equals("content")) {
+					pstmt.setString(1, "%" + map.get("searchWord").toLowerCase() + "%");
+				}
+			}
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				cnt = rs.getInt(1);
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return cnt;
+	} // end rowTotalCount()
+
+	public List<BoardDTO> listMethod(PageDTO pdto) {
 		List<BoardDTO> aList = new ArrayList<BoardDTO>();
 		try {
 			conn = init();
-			String sql = "select b.* " + "from (select rownum as rm, a.* " + "from (select * from board "
-					+ "order by ref desc,re_step asc)a)b";
+			String sql = "select b.* from (select rownum as rm, a.* from (select * from board ";
+			if (pdto.getSearchKey() != null && !(pdto.getSearchKey().equals("all"))) {
+				if (pdto.getSearchKey().equals("subject") || pdto.getSearchKey().equals("writer")
+						|| pdto.getSearchKey().equals("content")) {
+					sql += "where lower(" + pdto.getSearchKey() + ") like lower('%" + pdto.getSearchWord() + "%') ";
+				}
+			}
+			sql += "order by ref desc,re_step asc)a)b where b.rm>=? and b.rm<=?";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, pdto.getStartRow());
+			pstmt.setInt(2, pdto.getEndRow());
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				BoardDTO dto = new BoardDTO();
@@ -78,7 +124,7 @@ public class BoardDAO {
 			}
 		}
 		return aList;
-	}
+	} // end listMethod()
 
 	public void readCountMethod(int num) {
 		try {
@@ -130,7 +176,7 @@ public class BoardDAO {
 			}
 		}
 		return dto;
-	}
+	} // viewMethod()
 
 	public void insertMethod(BoardDTO dto) {
 		try {
@@ -172,6 +218,48 @@ public class BoardDAO {
 		}
 	} // end insertMethod()
 
+	public void updateMethod(BoardDTO dto) {
+		try {
+			conn = init();
+			String sql = "update board set email=?,subject=?,content=?,upload=? where num=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getEmail());
+			pstmt.setString(2, dto.getSubject());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setString(4, dto.getUpload());
+			pstmt.setInt(5, dto.getNum());
+
+			pstmt.executeUpdate();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	} // end updateMethod()
+
+	public void deleteMethod(int num) {
+		try {
+			conn = init();
+			String sql = "delete from board where num = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	} // deleteMethod()
+
 	public void reStepMethod(HashMap<String, Integer> map) {
 		try {
 			conn = init();
@@ -187,11 +275,34 @@ public class BoardDAO {
 			try {
 				exit();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 	} // end reStepMethod()
+
+	public String fileMethod(int num) {
+		String filename = null;
+		try {
+			conn = init();
+			String sql = "select upload from board where num=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				filename = rs.getString("upload");
+
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				exit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return filename;
+	} // end fileMethod()
 
 } // end class

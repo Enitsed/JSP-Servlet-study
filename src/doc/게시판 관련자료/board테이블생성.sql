@@ -41,7 +41,6 @@ select * from board;
 답변     4        1           1             1
 답변     3        1           2             1
 
-
 select num, ref, re_step, re_level
 from board
 where ref=30
@@ -75,8 +74,6 @@ boardview
 
 select count(*) from board where subject like '%w%'
 select count(*) from board where writer like '%3%'
-
-
 
 
 select num, ref, re_step,re_level 
